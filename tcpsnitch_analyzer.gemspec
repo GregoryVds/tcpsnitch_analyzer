@@ -1,10 +1,10 @@
 Gem::Specification.new do |s|
   s.name          = 'tcpsnitch_analyzer'
-  s.version       = '0.0.0'
+  s.version       = '0.0.1'
   s.date          = '2017-01-10'
   s.summary       = 'Tool to analyze tcpsnitch traces'
-  s.description   = 'Tool to analyze tcpsnitch traces. Longer description to come.'
-  s.homepage      = 'http://rubygems.org/gems/tcpsnitch_analyzer'
+  s.description   = 'Accepts a single or multiple tcpsnitch JSON traces as argument and compute statistical information.'
+  s.homepage      = 'https://github.com/GregoryVds/tcpsnitch_analyzer'
   s.authors       = ['Gregory Vander Schueren']
   s.email         = 'gregory.vanderschueren@gmail.com'
   s.license       = 'GPL-3.0' 

@@ -7,7 +7,7 @@ require 'tcpsnitch_analyzer/time_serie_stat'
 
 module TcpsnitchAnalyzer
   EXECUTABLE = 'tcpsnitch_analyzer'
-  VERSION = '0.0.0'
+  VERSION = '0.0.1'
   
   # Configure Oj
   Oj.default_options = { symbol_keys: true }
