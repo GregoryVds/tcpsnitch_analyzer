@@ -1,8 +1,8 @@
 # tcpsnitch\_analyzer
 
-## Usage
-
 Analysis tool for [tcpsnitch](https://github.com/GregoryVds/tcpsnitch) traces. 
+
+## Usage
 
 Accepts a single or multiple tcpsnitch JSON traces as argument and compute statistical information.
 
