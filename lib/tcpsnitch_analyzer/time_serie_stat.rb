@@ -11,6 +11,8 @@ module TcpsnitchAnalyzer
     end
 
     def self.print(options)
+      return unless options.should_plot
+
       Gnuplot.open do |gp|
         Gnuplot::Plot.new(gp) do |plot|
           plot.title  "Time serie: #{options.node_path}(t)"

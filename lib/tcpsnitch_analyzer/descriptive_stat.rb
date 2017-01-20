@@ -9,6 +9,7 @@ module TcpsnitchAnalyzer
       if val.is_a? Integer
         @@data.push(val)
       else
+        puts val.class
         if val.is_a? Hash
           TcpsnitchAnalyzer.error("invalid value for descriptive statistic: "\
                                   "non-terminal node")
@@ -24,6 +25,7 @@ module TcpsnitchAnalyzer
       end
       
       # Only plot CDF is we have a range
+      return unless options.should_plot
       return unless @@data.range > 0 
 
       x = @@data.sort

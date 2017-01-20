@@ -5,6 +5,7 @@ module TcpsnitchAnalyzer
   class OptParser 
     def self.default_options
       o = OpenStruct.new
+      o.should_plot = true
       o.analysis_type = ProportionStat
       o.event_filter = nil 
       o.node_path = "type"
