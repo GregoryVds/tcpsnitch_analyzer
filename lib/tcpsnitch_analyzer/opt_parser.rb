@@ -3,12 +3,17 @@ require 'ostruct'
 
 module TcpsnitchAnalyzer
   class OptParser 
+    def self.default_options
+      o = OpenStruct.new
+      o.analysis_type = ProportionStat
+      o.event_filter = nil 
+      o.node_path = "type"
+      o
+    end
+
     def self.parse(args)
-      options = OpenStruct.new
-      options.analysis_type = ProportionStat
-      options.event_filter = nil 
-      options.node_path = "type"
-        
+      options = default_options
+
       begin
         OptionParser.new do |opts|
           opts.banner = "Usage: #{EXECUTABLE} [-h] [options] file...\n"

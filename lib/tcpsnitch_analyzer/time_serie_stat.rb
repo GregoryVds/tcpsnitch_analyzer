@@ -3,16 +3,14 @@ module TcpsnitchAnalyzer
     @@x = []
     @@y = []
 
-    def self.add_point(timestamp, y)
+    def self.add_data_point(val, timestamp)
       usec = timestamp[:sec] * 1000000 + timestamp[:usec]
       @@min ||= usec
       @@x.push(usec-@@min)
-      @@y.push(y)
+      @@y.push(val)
     end
 
     def self.print(options)
-      puts "Time serie plot"
-      
       Gnuplot.open do |gp|
         Gnuplot::Plot.new(gp) do |plot|
           plot.title  "Time serie: #{options.node_path}(t)"

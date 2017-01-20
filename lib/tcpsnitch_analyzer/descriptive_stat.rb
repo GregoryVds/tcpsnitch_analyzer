@@ -5,7 +5,7 @@ module TcpsnitchAnalyzer
   class DescriptiveStat
     @@data = []
 
-    def self.add_val(val)
+    def self.add_data_point(val, timestamp)
       if val.is_a? Integer
         @@data.push(val)
       else
@@ -19,7 +19,6 @@ module TcpsnitchAnalyzer
     end
 
     def self.print(options)
-      puts "Descriptive statistics:"
       @@data.descriptive_statistics.each do |key, value|
         puts "#{key}".ljust(20) + "#{value}" 
       end
