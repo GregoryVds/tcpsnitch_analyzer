@@ -7,12 +7,12 @@ options = TcpsnitchAnalyzer::OptParser.parse(ARGV)
 
 # Check files
 files = ARGV
-
 if files.empty? then 
   TcpsnitchAnalyzer::error("missing argument, must provide at least 1 file")
   exit 1
 end
 
+# Check Analysis type
 if options.analysis_type == TcpsnitchAnalyzer::TimeSerieStat and 
    files.size > 1 then
   TcpsnitchAnalyzer::error("invalid argument: time serie analysis has no "\
@@ -20,5 +20,8 @@ if options.analysis_type == TcpsnitchAnalyzer::TimeSerieStat and
   exit 1
 end
 
+# Parse files
+values = TcpsnitchAnalyzer::TraceParser.new(options, files).values
+
 # Start processing
-TcpsnitchAnalyzer.process_files(options, files)
+options.analysis_type.new(options, values).compute

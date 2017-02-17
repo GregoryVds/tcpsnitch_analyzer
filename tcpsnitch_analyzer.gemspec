@@ -12,8 +12,10 @@ Gem::Specification.new do |s|
     'lib/tcpsnitch_analyzer.rb',
     'lib/tcpsnitch_analyzer/descriptive_stat.rb',
     'lib/tcpsnitch_analyzer/opt_parser.rb',
+    'lib/tcpsnitch_analyzer/stat.rb',
     'lib/tcpsnitch_analyzer/proportion_stat.rb',
     'lib/tcpsnitch_analyzer/time_serie_stat.rb',
+    'lib/tcpsnitch_analyzer/trace_parser.rb'
   ]
   s.executables << 'tcpsnitch_analyzer'
   s.add_runtime_dependency 'oj', '~> 2.18' 

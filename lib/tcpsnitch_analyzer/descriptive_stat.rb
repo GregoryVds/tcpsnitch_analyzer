@@ -2,52 +2,66 @@ require 'descriptive_statistics'
 require 'gnuplot'
 
 module TcpsnitchAnalyzer
-  class DescriptiveStat
-    @@data = []
+  class DescriptiveStat < Stat
+    @datapoints = []
+ 
+    def initialize(opts, files)
+      super
+      validate_data_type!(@datapoints.first.val)
+    end
 
-    def self.add_data_point(val, timestamp)
-      if val.is_a? Integer
-        @@data.push(val)
-      else
-        puts val.class
-        if val.is_a? Hash
-          TcpsnitchAnalyzer.error("invalid value for descriptive statistic: "\
+    def validate_data_type!(val)
+      invalid_val!(val) if !val.is_a?(Integer) 
+    end
+ 
+    def invalid_val!(val)
+      if val.is_a? Hash
+        TcpsnitchAnalyzer.error("invalid value for descriptive statistic: "\
                                   "non-terminal node")
-        else
-          TcpsnitchAnalyzer.error("invalid value for descriptive statistic: '#{val}'")
-        end
+      else
+        TcpsnitchAnalyzer.error("invalid value type for descriptive statistic:"\
+                                " '#{val}'")
       end
     end
 
-    def self.print(options)
-      @@data.descriptive_statistics.each do |key, value|
-        puts "#{key}".ljust(20) + "#{value}" 
+    def cdf(sorted_val)
+      n = sorted_val.size
+      sorted_val.map do |el|
+        ((sorted_val.rindex { |v| v <= el } || -1.0) + 1.0) / n * 100.0
       end
-      
-      # Only plot CDF is we have a range
-      return unless options.should_plot
-      return unless @@data.range > 0 
+    end
 
-      x = @@data.sort
-      n = x.size
-      y = x.map do |el|
-        ((x.rindex { |v| v <= el } || -1.0) + 1.0) / n * 100.0
-      end
+    def plot(vals) # Plot a CDF
+      x = vals.sort
+      y = cdf(x)
 
       Gnuplot.open do |gp|
         Gnuplot::Plot.new(gp) do |plot|
-          plot.xrange "[#{@@data.min}:#{@@data.max}]; set logscale x"
-          plot.title  "CDF for #{options.node_path} (#{options.event_filter} events)"
+          if vals.min < 0 or vals.max < 0
+            plot.xrange "[#{vals.min}:#{vals.max}]"
+          else
+            plot.xrange "[#{vals.min}:#{vals.max}]; set logscale x"
+          end
+          plot.title  "CDF for #{@opts.node_path} (#{@opts.event_filter} events)"
           plot.xlabel "Value"
           plot.ylabel "Normal CDF"
           plot.data << Gnuplot::DataSet.new([x,y]) do |ds|
             ds.with = "lines"
             ds.linewidth = 4
-            ds.title = options.node_path.split('.').last
+            ds.title = @opts.node_path.split('.').last
           end
         end
       end # Gnuplot.open
-    end # def self.print
+    end
+
+    def compute
+      super
+      vals = @datapoints.map(&:val).to_a
+      vals.descriptive_statistics.each do |key, value|
+        puts "#{key}".ljust(20) + "#{value}" 
+      end
+      plot(vals) if @opts.should_plot && vals.range > 0 
+    end 
 
   end # class
 end # module

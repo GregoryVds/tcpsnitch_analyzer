@@ -1,25 +1,27 @@
 module TcpsnitchAnalyzer
-  class TimeSerieStat
-    @@x = []
-    @@y = []
+  class TimeSerieStat < Stat
+    @x = []
+    @y = []
 
-    def self.add_data_point(val, timestamp)
-      usec = timestamp[:sec] * 1000000 + timestamp[:usec]
-      @@min ||= usec
-      @@x.push(usec-@@min)
-      @@y.push(val)
+    def compute
+      super
+      return unless @opts.should_plot
+      @datapoint.each do |dp|
+        @@min ||= dp.timestamp
+        @@x.push(dp.timestamp-@@min)
+        @@y.push(dp.val)
+      end
+      print
     end
 
-    def self.print(options)
-      return unless options.should_plot
-
+    def print
       Gnuplot.open do |gp|
         Gnuplot::Plot.new(gp) do |plot|
           plot.title  "Time serie: #{options.node_path}(t)"
           plot.xlabel "Micro seconds"
-          plot.ylabel options.node_path.split('.').last.capitalize
+          plot.ylabel @opts.node_path.split('.').last.capitalize
         
-          plot.data << Gnuplot::DataSet.new([@@x,@@y]) do |ds|
+          plot.data << Gnuplot::DataSet.new([@x,@y]) do |ds|
             ds.with = "lines"
             ds.linewidth = 4
             ds.notitle
