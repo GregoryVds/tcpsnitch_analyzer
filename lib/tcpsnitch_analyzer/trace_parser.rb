@@ -12,7 +12,7 @@ module TcpsnitchAnalyzer
     end
 
     def pass_filter?(hash)
-      @opts.filter ? hash[:type] == @opts.filter : true
+      @opts.event_filter ? hash[:type].eql?(@opts.event_filter) : true
     end
 
     def val_for(hash, keys)
