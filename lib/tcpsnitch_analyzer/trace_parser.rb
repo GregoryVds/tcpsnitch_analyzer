@@ -18,7 +18,7 @@ module TcpsnitchAnalyzer
     def val_for(hash, keys)
       keys.reduce(hash) { |h, key| h[key] }
     end
-
+    
     def keys_from_path(path)
       path.split('.').collect(&:to_sym)
     end
@@ -28,7 +28,7 @@ module TcpsnitchAnalyzer
     end
 
     def build_data_point(hash)
-      val = node_val(hash, @opts.node_path)
+      raise unless val = node_val(hash, @opts.node_path)
       timestamp = node_val(hash, 'timestamp')
       TcpsnitchAnalyzer::DataPoint.new(val, timestamp)
     rescue
