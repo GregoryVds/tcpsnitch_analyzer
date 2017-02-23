@@ -9,7 +9,6 @@ options = TcpsnitchAnalyzer::OptParser.parse(ARGV)
 files = ARGV
 if files.empty? then 
   TcpsnitchAnalyzer::error("missing argument, must provide at least 1 file")
-  exit 1
 end
 
 # Check Analysis type
@@ -17,11 +16,13 @@ if options.analysis_type == TcpsnitchAnalyzer::TimeSerieStat and
    files.size > 1 then
   TcpsnitchAnalyzer::error("invalid argument: time serie analysis has no "\
                             "meaning on multiple JSON traces")
-  exit 1
 end
 
 # Parse files
 values = TcpsnitchAnalyzer::TraceParser.new(options, files).values
+if values.first.nil? then 
+  TcpsnitchAnalyzer::error("no values matching criteria (check the filter)")
+end
 
 # Start processing
 options.analysis_type.new(options, values).compute

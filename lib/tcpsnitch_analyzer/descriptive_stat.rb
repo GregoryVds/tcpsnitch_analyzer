@@ -3,8 +3,6 @@ require 'gnuplot'
 
 module TcpsnitchAnalyzer
   class DescriptiveStat < Stat
-    @datapoints = []
- 
     def initialize(opts, files)
       super
       validate_data_type!(@datapoints.first.val)
