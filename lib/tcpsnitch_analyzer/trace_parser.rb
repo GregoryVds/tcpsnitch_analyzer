@@ -45,8 +45,18 @@ module TcpsnitchAnalyzer
       end
     end
 
+    def is_file!(file)
+      if File.file?(file)
+        true
+      else
+        TcpsnitchAnalyzer.error("invalid file path: '#{file}'") 
+      end
+    end
+
     def values
-      @files.lazy.flat_map do |file|
+      @files.lazy.select do |file|
+        is_file!(file)  
+      end.flat_map do |file|
         process_file(file)
       end
     end
